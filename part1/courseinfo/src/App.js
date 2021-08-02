@@ -1,97 +1,43 @@
 import React, {useState} from "react";
 
 const App = () => {
-    const [counter, setCounter] = useState(0)
-    const increaseByOne = () => setCounter(counter + 1)
-    const setToZero = () => setCounter(0)
+    const [left, setLeft] = useState(0)
+    const [right, setRight] = useState(0)
+    const [allClicks, setAll] = useState([])
 
-    return (
-        <div>
-            <div>{counter}</div>
-            <button onClick={increaseByOne}>plus</button>
-            <button onClick={setToZero}>zero</button>
-        </div>
-    )
-}
-
-/*
-const App = () => {
-    const course = {
-        name: "Half Stack application development",
-        parts: [
-            {
-                name: "Fundamentals of React",
-                exercises: 10
-            },
-            {
-                name: "Using props to pass data",
-                exercises: 7
-            },
-            {
-                name: "State of a component",
-                exercises: 14
-            }
-        ]
+    const handleLeftClick = () => {
+        setAll(allClicks.concat("L"))
+        setLeft(left + 1)
     }
 
+    const handleRightClick = () => {
+        setAll(allClicks.concat("R"))
+        setRight(right + 1)
+    }
     return (
         <div>
-            <Header course={course.name}/>
-            <Hello name={"Ethan"} age={30}/>
-            <Content parts={course.parts}/>
-            <Total parts={course.parts}/>
-        </div>
-
-    );
-}
-
-const Hello = ({name, age}) => {
-
-    const bornYear = () => new Date().getFullYear() - age
-
-    return (
-        <div>
-            <p>
-                Hello {name}, you are {age} years old.
-            </p>
-            <p>
-                So you were probably born in {bornYear()}
-            </p>
+            {left}
+            <Button handleClick={handleLeftClick} text={"Left"}/>
+            <Button handleClick={handleRightClick} text={"Right"}/>
+            {right}
+            <History allClicks={allClicks}/>
         </div>
     )
 }
 
-const Header = (props) => {
+const History = (props) => {
+    if (props.allClicks.length === 0) {
+        return (
+            <div>The app is used by pressing the buttons</div>
+        )
+    }
     return (
-        <h1>{props.course}</h1>
+        <div>Button press history: {props.allClicks.join(" ")}</div>
     )
 }
 
-const Content = (props) => {
-    return (
-        <div>
-            {props.parts.map(part => {
-                return <Part name={part.name} exercises={part.exercises}/>
-            })}
-        </div>
-    )
-}
-
-const Total = (props) => {
-    let total = 0
-    props.parts.forEach(part => {total += part.exercises})
-
-    return (
-        <p>Number of exercises {total}</p>
-    )
-}
-
-const Part = (props) => {
-    return (
-        <p>{props.name} {props.exercises}</p>
-    )
-}
-*/
-
+const Button = ({handleClick, text}) => (
+    <button onClick={handleClick}>{text}</button>
+)
 
 export default App;
