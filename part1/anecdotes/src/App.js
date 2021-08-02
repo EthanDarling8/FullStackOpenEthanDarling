@@ -11,22 +11,53 @@ function App() {
         'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
     ]
     const [selected, setSelected] = useState(0)
+    const [votes, setVotes] = useState(new Array(7).fill(0))
+    const [highestAnecdote, setHighestAnecdote] = useState(" ")
+    const [highestVotes, setHighestVotes] = useState(0)
 
     const handleAnecdote = () => {
         let result = randInt(0, anecdotes.length - 1)
-        console.log(result)
+        // console.log(result)
+        console.log("votes: ", votes)
         setSelected(result)
+        checkHighestVote()
+    }
+
+    const handleVote = () => {
+        const copy = [...votes]
+        copy[selected] += 1
+        // console.log("copy: ", copy)
+        setVotes(copy)
+        checkHighestVote()
+    }
+
+    const checkHighestVote = () => {
+        let temp = 0;
+        for (let i = 0; i < votes.length; i++) {
+            if (votes[i] > temp) {
+                temp = votes[i]
+                setHighestAnecdote(anecdotes[i])
+                setHighestVotes(temp)
+            }
+        }
     }
 
     return (
         <div>
+            <h1>Anecdote of the day</h1>
             <p>{anecdotes[selected]}</p>
+            <p>Has {votes[selected]} votes</p>
+            <Button clickHandler={handleVote} text={"Vote"}/>
             <Button clickHandler={handleAnecdote} text={"Next Anecdote"}/>
+
+            <h1>Anecdote with the most votes</h1>
+            <p>{highestAnecdote}</p>
+            <p>{highestAnecdote !== " " ? "Has " + highestVotes + " votes": "No votes cast yet."}</p>
         </div>
     )
 }
 
-const Button = ({clickHandler, text}) => (
+const Button = ({clickHandler, text }) => (
     <button onClick={clickHandler}>{text}</button>
 )
 
